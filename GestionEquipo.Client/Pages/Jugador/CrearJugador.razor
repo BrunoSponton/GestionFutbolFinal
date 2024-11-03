@@ -1,0 +1,60 @@
+﻿@page "/api/Jugadores"
+@inject IHttpServicio http
+@inject NavigationManager navigationManager
+
+<h3>Nuevo Jugador</h3>
+
+<EditForm Model="jugador" OnValidSubmit="Grabar">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Nombre</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@jugador.Nombre" />
+            <ValidationMessage For="@(() => jugador.Nombre)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Edad</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@jugador.Edad" />
+            <ValidationMessage For="@(() => jugador.Edad)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Posicion</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@jugador.Posicion" />
+            <ValidationMessage For="@(() => jugador.Posicion)" />
+        </div>
+    </div>
+    <br />
+    <button class="btn btn-danger" type="submit">Aceptar</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(mensajeExito))
+{
+    <div class="alert alert-success mt-3">
+        @mensajeExito
+    </div>
+}
+
+@code {
+    private Jugador jugador = new Jugador();
+    private string mensajeExito;
+
+    private async Task Grabar()
+    {
+        var httpRespuesta = await http.Post<Jugador>("/api/Jugadores", jugador);
+        if (!httpRespuesta.Error)
+        {
+            var nuevoJugador = httpRespuesta.Respuesta;
+            mensajeExito = $"El jugador fue agregado exitosamente";
+            jugador = new Jugador(); // Limpia el formulario
+        }
+        else
+        {
+            mensajeExito = "Ocurrió un error al intentar guardar el jugador.";
+        }
+    }
+}
+
