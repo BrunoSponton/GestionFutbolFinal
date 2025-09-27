@@ -1,4 +1,5 @@
 ﻿using GestionEquipo.DB.DATA.ENTITY;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GestionEquipo.DB.DATA
 {
-    public class Context : DbContext
+    public class Context : IdentityDbContext
     {
         public DbSet<Partido> Partidos { get; set; }
         public DbSet<Jugador> Jugadores { get; set; }

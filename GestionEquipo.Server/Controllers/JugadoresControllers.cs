@@ -3,7 +3,10 @@ using GestionEquipo.DB.DATA;
 using GestionEquipo.DB.DATA.ENTITY;
 using GestionEquipo.Server.Repositorio;
 using GestionEquipo.Shared.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;  
 
 namespace GestionEquipo.Server.Controllers
@@ -16,17 +19,23 @@ namespace GestionEquipo.Server.Controllers
         private readonly IJugadorRepositorio repositorio;
         private readonly IMapper mapper;
         private readonly Context context;
+        //Inyectar la dependencia en el constructor del controller y generar su campo correspondiente.
+        private readonly IOutputCacheStore outputCacheStore;
+        //Definir un campo (atributo privado) la clave que identifica el Cache del controller.
+        private const string cacheKey = "Jugadores";
 
-        public JugadoresControllers(IJugadorRepositorio repositorio, IMapper mapper, Context context)
+        public JugadoresControllers(IJugadorRepositorio repositorio, IMapper mapper, Context context, IOutputCacheStore outputCacheStore)
         {
             this.repositorio = repositorio;
             this.mapper = mapper;
             this.context = context;
+            this.outputCacheStore = outputCacheStore;
         }
 
         //GET: --------------------------------------------------------------
 
         [HttpGet]
+        [OutputCache(Tags = [cacheKey])] //En el método que recibe la petición HTTP en el controller donde se desee manejar un Cache colocar la etiqueta
         public async Task<ActionResult<List<Jugador>>> Get()
         {
             return await repositorio.Select();
@@ -70,7 +79,16 @@ namespace GestionEquipo.Server.Controllers
         {
             try
             {
-                return await repositorio.Insert(entidad);
+                var id = await repositorio.Insert(entidad);
+                if (id == 0)
+                {
+                    return BadRequest("No se pudo agregar el jugador");
+                }
+                //En los métodos donde se modifica el contenido del Cache deben limpiar su contenido
+                //relación a la información que cambian.
+                await outputCacheStore.EvictByTagAsync(cacheKey, default);
+                return id;
+                
             }
             catch (Exception e)
             {

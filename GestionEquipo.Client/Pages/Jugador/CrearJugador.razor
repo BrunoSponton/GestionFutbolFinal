@@ -1,6 +1,8 @@
 ﻿@page "/api/Jugadores"
+@using Microsoft.AspNetCore.Authorization
 @inject IHttpServicio http
 @inject NavigationManager navigationManager
+@attribute [Authorize (Roles = "admin")]
 
 <h3>Nuevo Jugador</h3>
 
@@ -28,7 +30,7 @@
         </div>
     </div>
     <br />
-    <button class="btn btn-danger" type="submit">Aceptar</button>
+    <button class="btn btn-primary" type="submit">Aceptar</button>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(mensajeExito))
@@ -44,7 +46,7 @@
 
     private async Task Grabar()
     {
-        var httpRespuesta = await http.Post<Jugador>("/api/Jugadores", jugador);
+        var httpRespuesta = await http.Post<Jugador, int>("/api/Jugadores", jugador);
         if (!httpRespuesta.Error)
         {
             var nuevoJugador = httpRespuesta.Respuesta;

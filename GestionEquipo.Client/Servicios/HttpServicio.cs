@@ -12,7 +12,7 @@ namespace GestionEquipo.Client.Servicios
             this.http = http;
         }
 
-        public async Task<HttpRespuesta<object>> Post<T>(string url, T entidad)
+        public async Task<HttpRespuesta<TResp>> Post<T, TResp>(string url, T entidad)
         {
             var enviarJson = JsonSerializer.Serialize(entidad);
 
@@ -23,12 +23,12 @@ namespace GestionEquipo.Client.Servicios
             var response = await http.PostAsync(url, enviarContent);
             if (response.IsSuccessStatusCode)
             {
-                var respuesta = await DesSerializar<object>(response);
-                return new HttpRespuesta<object>(respuesta, false, response);
+                var respuesta = await DesSerializar<TResp>(response);
+                return new HttpRespuesta<TResp>(respuesta, false, response);
             }
             else
             {
-                return new HttpRespuesta<object>(default, true, response);
+                return new HttpRespuesta<TResp>(default, true, response);
             }
         }
 
