@@ -1,9 +1,9 @@
-using GestionEquipo.Client;
-using GestionEquipo.Client.Autorizacion;
-using GestionEquipo.Client.Servicios;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using GestionEquipo.Client;
+using GestionEquipo.Client.Autorizacion;
+using GestionEquipo.Client.Servicios;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -15,7 +15,9 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<IHttpServicio, HttpServicio>();
 
 builder.Services.AddScoped<ProveedorAutenticacionJWT>();
-builder.Services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(proveedor => proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
-builder.Services.AddScoped<ILoginService, ProveedorAutenticacionJWT>(proveedor => proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
+builder.Services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(proveedor =>
+    proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
+builder.Services.AddScoped<ILoginService, ProveedorAutenticacionJWT>(proveedor =>
+    proveedor.GetRequiredService<ProveedorAutenticacionJWT>());
 
 await builder.Build().RunAsync();

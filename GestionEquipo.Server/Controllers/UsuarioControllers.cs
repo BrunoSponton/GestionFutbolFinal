@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GestionEquipo.Shared.DTO;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace GestionEquipo.Server.Controllers
 {
     [ApiController]
-    [Route("api/Usuarios")]
+    [Route("usuarios")]
     public class UsuarioControllers : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
@@ -92,6 +92,5 @@ namespace GestionEquipo.Server.Controllers
             };
 
         }
-
     }
 }

@@ -43,9 +43,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"])),
-            ClockSkew = TimeSpan.Zero // Reducir el sesgo del reloj a cero para fines de prueba
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["jwtkey"]))
         };
     });
 

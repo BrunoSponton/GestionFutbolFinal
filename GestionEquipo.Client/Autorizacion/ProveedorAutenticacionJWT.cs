@@ -2,10 +2,11 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using GestionEquipo.Client.Servicios;
+using GestionEquipo.Shared.DTO;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using GestionEquipo.Shared.DTO;
 
 namespace GestionEquipo.Client.Autorizacion
 {
