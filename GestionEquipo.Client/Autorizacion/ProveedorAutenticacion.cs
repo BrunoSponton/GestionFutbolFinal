@@ -14,6 +14,7 @@ namespace GestionEquipo.Client.Autorizacion
                 {
                     new Claim(ClaimTypes.Name, "Bruno Giovanni"),
                     new Claim(ClaimTypes.Role, "admin"),
+                    new Claim(ClaimTypes.Role, "operador"),
                     new Claim("DNI", "42.338.781")
                 },
                 authenticationType: "ok"

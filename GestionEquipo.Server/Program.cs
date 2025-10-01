@@ -3,6 +3,7 @@ using GestionEquipo.Server.Repositorio;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 //---------------------------------------------------------------------------------------------------------------
@@ -15,7 +16,7 @@ builder.Services.AddOutputCache(opciones =>
 
 {
 
-    opciones.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(10);
+    opciones.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(600);
 
 });
 
@@ -34,6 +35,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<Context>()
                 .AddDefaultTokenProviders();
 
+// Configura la autenticación JWT para validar tokens de seguridad en las solicitudes a la API.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -46,7 +48,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["jwtkey"]))
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["jwtkey"])),
         };
     });
 
@@ -56,6 +58,7 @@ builder.Services.AddScoped<IJugadorRepositorio, JugadorRepositorio>();
 
 //---------------------------------------------------------------------------------------------------------------
 // CONSTRUCCION DE LA APLICACION
+
 var app = builder.Build();
 
 

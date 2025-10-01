@@ -17,6 +17,7 @@ namespace GestionEquipo.Client.Autorizacion
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
 
+        //Crea un estado de autenticación "vacío" cuando no hay usuario logueado
         private AuthenticationState Anonimo =>
                                     new AuthenticationState(
                                         new ClaimsPrincipal(new ClaimsIdentity()));
@@ -26,17 +27,18 @@ namespace GestionEquipo.Client.Autorizacion
             this.js = js;
             this.httpClient = httpClient;
         }
-
+        
+        //Al cargar la app, busca token en localStorage
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var token = await js.ObtenerDeLocalStorage(TOKENKEY);
 
             if (token is null)
             {
-                return Anonimo;
+                return Anonimo; 
             }
 
-            return ConstruirAuthenticationState(token.ToString()!);
+            return ConstruirAuthenticationState(token.ToString()!); 
         }
 
         private AuthenticationState ConstruirAuthenticationState(string token)

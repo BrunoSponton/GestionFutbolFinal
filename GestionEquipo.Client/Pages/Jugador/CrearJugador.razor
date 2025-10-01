@@ -1,8 +1,6 @@
 ﻿@page "/api/Jugadores"
-@using Microsoft.AspNetCore.Authorization
 @inject IHttpServicio http
 @inject NavigationManager navigationManager
-@attribute [Authorize (Roles = "admin")]
 
 <h3>Nuevo Jugador</h3>
 
